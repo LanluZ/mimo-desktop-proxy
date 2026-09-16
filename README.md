@@ -29,7 +29,7 @@ flowchart LR
   PX["proxy.mjs<br/>转发 + 格式转换 + 凭据注入<br/>不做推理"]
   UP["上游 MiMo API<br/>mimo-server-cn.xiaomimimo.com<br/>/api/route/chat/completions<br/>X-Mimo-Source: mimocode-cli-free"]
   RESP["/v1/responses 兼容层（在 proxy 内）<br/>① Responses 请求 → chat/completions<br/>② chat 响应 → 包回 Responses 事件<br/>上游无 /api/route/responses（实测 404）"]
-  COOK["cookie 失效<br/>上游 401/403 → 重连客户端重拉 → 原请求重发<br/>桌面端重启后 serviceToken 失效属正常<br/>模型别名 mimo-auto → mimo-pro，未知模型名回退 mimo-pro"]
+  COOK["cookie 失效<br/>上游 401/403 → 重连客户端重拉 → 原请求重发<br/>桌面端重启后 serviceToken 失效属正常<br/>未知模型名回退 mimo-pro"]
 
   CL -->|"本地 HTTP"| PX
   CL -.-> RESP
@@ -49,6 +49,21 @@ flowchart LR
 | 操作系统 | Windows 10 / 11 |
 | Node.js | ≥ 22 |
 | MiMo Desktop |  |
+
+## 使用方法
+
+1. 需要一个登录且拥有内测资格的 Xiaomi MiMo Desktop 账号，并且已安装并登录 Xiaomi MiMo Desktop
+2. 运行 `start-mimo-proxy.cmd`
+3. 端点 `127.0.0.1:8800`
+
+
+模型映射：
+
+| 你填的模型名 | 代理转发给上游的名字 | 上游回显的模型（真正跑推理的 id） |
+|---|---|---|
+| `mimo-pro` | `mimo-pro` | `mimo-x-pro-preview` |
+| `mimo-flash` | `mimo-flash` | `mimo-x-flash-preview` |
+
 
 ## 免责声明
 

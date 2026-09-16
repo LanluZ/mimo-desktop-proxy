@@ -42,6 +42,6 @@ if errorlevel 1 (
 )
 
 echo.
-echo ready: http://127.0.0.1:%PROXY%/v1   (models: mimo-auto, mimo-pro, mimo-flash)
+echo ready: http://127.0.0.1:%PROXY%/v1   (models: mimo-pro, mimo-flash)
 echo check: curl http://127.0.0.1:%PROXY%/health
 endlocal

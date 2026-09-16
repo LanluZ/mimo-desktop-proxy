@@ -9,7 +9,7 @@
  * Zero dependencies (Node >= 18). Binds to 127.0.0.1 only.
  *
  *   node proxy.mjs
- *   curl http://127.0.0.1:8800/v1/chat/completions -d '{"model":"mimo-auto","messages":[{"role":"user","content":"hi"}]}'
+ *   curl http://127.0.0.1:8800/v1/chat/completions -d '{"model":"mimo-pro","messages":[{"role":"user","content":"hi"}]}'
  */
 
 import http from "node:http";
@@ -36,10 +36,12 @@ const CFG = {
   defaultModel: process.env.MIMO_DEFAULT_MODEL || "mimo-pro",
 };
 
-// Models the upstream understands. mimo-auto is the desktop app's own alias and is
-// rewritten to mimo-pro exactly like the app does (bb()/wR() in app.asar).
-const MODEL_ALIASES = { "mimo-auto": "mimo-pro", "mimo-flash": "mimo-flash", "mimo-pro": "mimo-pro" };
-const MODELS = ["mimo-auto", "mimo-pro", "mimo-flash"];
+// Models the upstream understands. The short names are the upstream's own aliases for
+// the real model ids (mimo-x-pro-preview / mimo-x-flash-preview); unknown names are
+// rewritten to CFG.defaultModel below. The desktop app's "mimo-auto" is deliberately
+// not handled: the upstream rejects that literal with chat_model_not_public.
+const MODEL_ALIASES = { "mimo-flash": "mimo-flash", "mimo-pro": "mimo-pro" };
+const MODELS = ["mimo-pro", "mimo-flash"];
 let cookies = [];
 let cookieHeader = "";
 let cookieMeta = {};
@@ -69,7 +71,7 @@ function log(...args) {
 
 // Map whatever the client asked for onto a model the upstream actually serves.
 function resolveModel(requested) {
-  const name = typeof requested === "string" && requested ? requested : "mimo-auto";
+  const name = typeof requested === "string" && requested ? requested : CFG.defaultModel;
   if (MODEL_ALIASES[name]) return MODEL_ALIASES[name];
   log(`unknown model "${name}" -> ${CFG.defaultModel} (override with MIMO_DEFAULT_MODEL)`);
   return CFG.defaultModel;
@@ -201,7 +203,7 @@ async function handleChat(req, res) {
   } catch {
     return badJson(res, req, raw, "chat/completions");
   }
-  const requested = typeof body.model === "string" && body.model ? body.model : "mimo-auto";
+  const requested = typeof body.model === "string" && body.model ? body.model : CFG.defaultModel;
   body.model = resolveModel(requested);
 
   const started = Date.now();
@@ -647,7 +649,7 @@ async function handleResponses(req, res) {
   } catch {
     return badJson(res, req, raw, "responses");
   }
-  const requested = typeof body.model === "string" && body.model ? body.model : "mimo-auto";
+  const requested = typeof body.model === "string" && body.model ? body.model : CFG.defaultModel;
   const chatBody = responsesToChat(body, resolveModel(requested));
   const started = Date.now();
 
