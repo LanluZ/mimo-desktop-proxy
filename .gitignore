@@ -1,0 +1,16 @@
+# 登录凭据
+cookies.json
+ck.cfg
+curlcfg.txt
+
+# 日志
+*.log
+
+# 本地工具状态
+.mimocode/
+node_modules/
+
+# 编辑器 / 系统
+.DS_Store
+Thumbs.db
+*.swp

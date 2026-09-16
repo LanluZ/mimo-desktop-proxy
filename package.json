@@ -1,0 +1,15 @@
+{
+  "name": "mimo-desktop-proxy",
+  "version": "1.0.0",
+  "private": true,
+  "description": "OpenAI-compatible local proxy in front of Xiaomi MiMo Desktop's session cookies and free-quota upstream",
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "start": "node proxy.mjs",
+    "cookies": "node pull_cookies.mjs"
+  }
+}
