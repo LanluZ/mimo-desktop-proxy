@@ -59,10 +59,10 @@ flowchart LR
 
 模型映射：
 
-| 你填的模型名 | 代理转发给上游的名字 | 上游回显的模型（真正跑推理的 id） |
-|---|---|---|
-| `mimo-pro` | `mimo-pro` | `mimo-x-pro-preview` |
-| `mimo-flash` | `mimo-flash` | `mimo-x-flash-preview` |
+| 模型名 | 上游回显的模型 |
+|---|---|
+| `mimo-pro` | `mimo-x-pro-preview` |
+| `mimo-flash` | `mimo-x-flash-preview` |
 
 
 ## 免责声明
